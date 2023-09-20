@@ -117,14 +117,14 @@ class Population():
         
         # Refereence data for checking progress stalling in the next score() call
         self.last_best = maxfit
-        
+
+        print(f'Gen {gen}: {maxfit}, {avgfit}, {stdfit}')
+  
         # If counter has matched stall value, reset the factor epoch, reset counter
         if self.counter >= self.stall:
             print("Progress stalling, reseting mutation factor")
             self.factor_epoch = 1
             self.counter = 0
-
-        print(f'Gen {gen}: {maxfit}, {avgfit}, {stdfit}')
 
         # return maxfit, avgfit, stdfit
 
