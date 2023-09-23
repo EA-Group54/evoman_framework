@@ -32,10 +32,10 @@ def main():
 
     # Number of generations and population size
     popsize = 25
-    gen = 30
+    gen = 90
 
     # Mutation factor (to decreease overtime, reset on stall)
-    mutation_factor = 2 # Some results. with gen = 90: 1-->93.3, 2-->93.9, 3-->93.3, 4-->93.5, 5-->93.9, 12-->93.2, 13-->93.9, 25-->93.4, 50-->93.1 Withoouot mutation 91.9
+    mutation_factor = .2 # Some results. with gen = 90: .2-->93.4, .5-->93.5, 1-->93.3, 2-->93.9, 3-->93.3, 4-->93.5, 5-->93.9, 12-->93.2, 13-->93.9, 25-->93.4, 50-->93.1 Without mutation 91.9
 
     # Calculate length for bias and weights array
     n = (env.get_num_sensors() + 1) * n_hidden_neurons + (n_hidden_neurons + 1) * 5
