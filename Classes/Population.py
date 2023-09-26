@@ -52,9 +52,10 @@ class Population():
         c1 = alpha * p1 + (1 - alpha) * p2
         c2 = alpha * p2 + (1 - alpha) * p1
 
-        # Mutation on children
-        c1 = self.mutate(c1)
-        c2 = self.mutate(c2)
+        if self.factor <= 0:
+            # Mutation on children
+            c1 = self.mutate(c1)
+            c2 = self.mutate(c2)
 
         return c1, c2
 
