@@ -1,0 +1,6 @@
+
+np.random.seed(399) #Original seed: 500 # 457 399 136 197 296 ｜ 555 956 
+n_hidden_neurons = 100
+popsize = 100
+gen = 90
+mutation_factor = 0.0 -or- 0.5

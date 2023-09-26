@@ -8,7 +8,8 @@ from Classes.PlayerController import PlayerController
 from Classes.Population import Population
 
 def main():
-    np.random.seed(500)
+    seed = 814
+    np.random.seed(seed) #Original seed: 500 # 457 399 136 197 296 ｜ 555 956 897 734 814
     # choose this for not using visuals and thus making experiments faster
     headless = True
     if headless:
@@ -35,7 +36,8 @@ def main():
     gen = 90
 
     # Mutation factor (to decreease overtime, reset on stall)
-    mutation_factor = 0 # Some results. with gen = 90: .2-->93.4, .5-->93.5, 1-->93.3, 2-->93.9, 3-->93.3, 4-->93.5, 5-->93.9, 12-->93.2, 13-->93.9, 25-->93.4, 50-->93.1 Without mutation 91.9
+    mutation_factor = 0.5 # For experiment, we are using .5 and 0
+    # Some results. with gen = 90: .2-->93.4, .5-->93.5, 1-->93.3, 2-->93.9, 3-->93.3, 4-->93.5, 5-->93.9, 12-->93.2, 13-->93.9, 25-->93.4, 50-->93.1 Without mutation 91.9
 
     # Calculate length for bias and weights array
     n = (env.get_num_sensors() + 1) * n_hidden_neurons + (n_hidden_neurons + 1) * 5
@@ -50,7 +52,11 @@ def main():
         pop.update(env, 20)
         pop.score(i + 1)
 
-    pop.savefitness(f'{experiment_name}/fitness.txt')
+    mutation_tag = ''
+    if mutation_factor > 0:
+        mutation_tag = 'm'
+    pop.savefitness(f'{experiment_name}/fitness-'+str(seed)+mutation_tag+'.txt')
+    pop.saveweights(f'{experiment_name}/weights-'+str(seed)+mutation_tag+'.txt')
 
 
 if __name__ == '__main__':

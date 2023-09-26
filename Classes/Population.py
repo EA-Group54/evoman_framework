@@ -167,7 +167,8 @@ class Population():
 
     def saveweights(self, path):
         # Get best fitness
-        best = np.where(self.fitness == np.max(self.fitness))
+        best = np.where(self.fitness == np.max(self.fitness))[0][0]
+        
 
         np.savetxt(path, self.pop[best].flatten())
 
