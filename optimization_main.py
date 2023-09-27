@@ -8,8 +8,9 @@ from Classes.PlayerController import PlayerController
 from Classes.Population import Population
 
 def main():
-    seed = 814
-    np.random.seed(seed) #Original seed: 500 # 457 399 136 197 296 ｜ 555 956 897 734 814
+    seed = 136
+    mutation_factor = 0.5
+    np.random.seed(seed) #Original seed: 500 # 136 197 296 399 457 ｜ 555 734 814 897 956
     # choose this for not using visuals and thus making experiments faster
     headless = True
     if headless:
@@ -23,7 +24,7 @@ def main():
 
     # initializes simulation in individual evolution mode, for single static enemy.
     env = Environment(experiment_name=experiment_name,
-                      enemies=[2],
+                      enemies=[7],
                       playermode="ai",
                       player_controller=PlayerController(n_hidden_neurons),
                       enemymode="static",
@@ -36,7 +37,7 @@ def main():
     gen = 90
 
     # Mutation factor (to decreease overtime, reset on stall)
-    mutation_factor = 0.5 # For experiment, we are using .5 and 0
+    #mutation_factor = 0.0 # For experiment, we are using .5 and 0
     # Some results. with gen = 90: .2-->93.4, .5-->93.5, 1-->93.3, 2-->93.9, 3-->93.3, 4-->93.5, 5-->93.9, 12-->93.2, 13-->93.9, 25-->93.4, 50-->93.1 Without mutation 91.9
 
     # Calculate length for bias and weights array
