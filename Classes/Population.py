@@ -29,6 +29,8 @@ class Population():
         self.counter = 0 # Counter used to reset mutation factor on stall
         self.stall = 5 # Number of epochs of no improvement before reseting the mutation factor
 
+        self.env=env #********
+
         # Evaluate fitness
         self.eval(env)
 
@@ -168,8 +170,7 @@ class Population():
     def saveweights(self, path):
         # Get best fitness
         best = np.where(self.fitness == np.max(self.fitness))[0][0]
-        
-
+        print('best', self.pop[best].flatten())
         np.savetxt(path, self.pop[best].flatten())
 
     def update_factor(self):
@@ -183,3 +184,4 @@ class Population():
         indiv += (np.random.normal(0, 1, len(indiv)) * sign)*(self.factor/self.factor_epoch)
 
         return indiv
+    
