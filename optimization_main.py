@@ -8,7 +8,7 @@ from Classes.PlayerController import PlayerController
 from Classes.Population import Population
 
 def main():
-    seed = 136
+    seed = 956
     mutation_factor = 0.5
     np.random.seed(seed) #Original seed: 500 # 136 197 296 399 457 ｜ 555 734 814 897 956
     # choose this for not using visuals and thus making experiments faster
@@ -24,7 +24,7 @@ def main():
 
     # initializes simulation in individual evolution mode, for single static enemy.
     env = Environment(experiment_name=experiment_name,
-                      enemies=[7],
+                      enemies=[4],
                       playermode="ai",
                       player_controller=PlayerController(n_hidden_neurons),
                       enemymode="static",
