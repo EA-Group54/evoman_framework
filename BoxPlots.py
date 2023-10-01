@@ -37,6 +37,10 @@ for i, file in enumerate(listdir(path)):
 
     results[enemy] = gain
 
+# Not sure why, in my computer they are coming out of order
+# Reordering
+results = dict(sorted(results.items()))
+
 # Plot boxplots
 ax.boxplot(results.values())
 
