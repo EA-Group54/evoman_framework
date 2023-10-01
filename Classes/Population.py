@@ -29,8 +29,6 @@ class Population():
         self.counter = 0 # Counter used to reset mutation factor on stall
         self.stall = 5 # Number of epochs of no improvement before reseting the mutation factor
 
-        self.env=env #********
-
         # Evaluate fitness
         self.eval(env)
 
@@ -54,10 +52,15 @@ class Population():
         c1 = alpha * p1 + (1 - alpha) * p2
         c2 = alpha * p2 + (1 - alpha) * p1
 
-        if self.factor <= 0:
+        # No longer needed, now the factor is always used, but a value of 0 results in 0 addition
+        """
+        if self.factor >= 0:    #if self.factor <= 0:
             # Mutation on children
             c1 = self.mutate(c1)
             c2 = self.mutate(c2)
+        """
+        c1 = self.mutate(c1)
+        c2 = self.mutate(c2)
 
         return c1, c2
 
@@ -102,9 +105,6 @@ class Population():
         # Replacing with new individual
         self.pop[worst] = indiv
 
-        # Set score high to make it not be replaced by following offspring in same generation
-        # self.fitness[worst] = np.inf
-
     def score(self, gen):
         """
         Get maximum, average and standard deviation from fitness belonging to current population
@@ -136,8 +136,9 @@ class Population():
         Update population with new population
         """
 
+        ## Having this evaluation first caused the first generation to be updated twice
         # Evaluate all individuals in current population
-        self.eval(env)
+        #self.eval(env)
 
         # Number of children has to be even
         if n_child % 2 != 0:
@@ -160,6 +161,9 @@ class Population():
         #update mutation factor
         self.update_factor()
 
+        # Evaluate all individuals in current population
+        self.eval(env)  # The values are appended after the new children have been added
+
     def savefitness(self, path):
         # Convert to numpy array
         savedfitness = np.array(self.savedfitness)
@@ -170,7 +174,6 @@ class Population():
     def saveweights(self, path):
         # Get best fitness
         best = np.where(self.fitness == np.max(self.fitness))[0][0]
-        print('best', self.pop[best].flatten())
         np.savetxt(path, self.pop[best].flatten())
 
     def update_factor(self):
@@ -181,7 +184,7 @@ class Population():
         sign = np.random.randint(0, 2, len(indiv)) * 2 - 1
 
         # Add mutation
-        indiv += (np.random.normal(0, 1, len(indiv)) * sign)*(self.factor/self.factor_epoch)
+        indiv += ( (np.random.normal(0, 1, len(indiv)) * sign)*(self.factor/self.factor_epoch) )
 
         return indiv
     

@@ -7,9 +7,9 @@ import os
 from Classes.PlayerController import PlayerController
 from Classes.Population import Population
 
-def main():
-    seed = 814
-    mutation_factor = 0.5
+def main(seed, mutation_factor, enemy):
+    seed = seed
+    mutation_factor = mutation_factor
     np.random.seed(seed) #Original seed: 500 # 136 197 296 399 457 ｜ 555 734 814 897 956
     # choose this for not using visuals and thus making experiments faster
     headless = True
@@ -24,7 +24,7 @@ def main():
 
     # initializes simulation in individual evolution mode, for single static enemy.
     env = Environment(experiment_name=experiment_name,
-                      enemies=[4],
+                      enemies=[enemy],
                       playermode="ai",
                       player_controller=PlayerController(n_hidden_neurons),
                       enemymode="static",
@@ -49,16 +49,29 @@ def main():
     # Create first population
     pop = Population(popsize, bounds, n, env, mutation_factor)
 
+    # Run generations
     for i in range(1, gen):
         pop.update(env, 20)
         pop.score(i + 1)
 
+    # Save file
     mutation_tag = ''
     if mutation_factor > 0:
         mutation_tag = 'm'
-    pop.savefitness(f'{experiment_name}/fitness-'+str(seed)+mutation_tag+'.txt')
-    pop.saveweights(f'{experiment_name}/weights-'+str(seed)+mutation_tag+'.txt')
+    pop.savefitness(f'{experiment_name}/'+'ene'+f'{enemy}'+'-fitness-'+str(seed)+mutation_tag+'.txt')
+    pop.saveweights(f'{experiment_name}/'+'ene'+f'{enemy}'+'-weights-'+str(seed)+mutation_tag+'.txt')
 
 
 if __name__ == '__main__':
-    main()
+
+    seeds = [136, 197, 296, 399, 457, 555, 734, 814, 897, 956]
+    mutation_factors = [0.0, 0.5]
+    enemies = [1,2,7]
+
+    for seed in seeds:
+        print(seed)
+        for mutation_factor in mutation_factors:
+            print(mutation_factor)
+            for enemy in enemies:
+                print(enemy)
+                main(seed,mutation_factor,enemy)

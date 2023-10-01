@@ -7,7 +7,10 @@ from matplotlib.offsetbox import AnchoredText
 
 
 from evoman.environment import Environment
+
 from demo_controller import player_controller
+#from Classes.PlayerController import PlayerController as player_controller  # SHou,d we use the same controller we used to train ***
+
 import numpy as np
 import pandas as pd
 import pickle as pkl
@@ -23,7 +26,7 @@ mode = "test"  # Can be test for generating competition files, or demo to just p
 
 experiment_name = 'test'
 n_enemies = 8
-n_hidden = 10
+n_hidden = 10   #Sould it be 100 (What we trained with)***
 
 # Switch for demo
 if mode == "demo":
