@@ -88,7 +88,7 @@ class Population():
 
         return best
 
-    def replace(self, indiv, k=10):
+    def replace(self, indiv, p1, p2, k=10):
         """
         Replaces individuals in population with new one based on tournament
         """
@@ -102,8 +102,9 @@ class Population():
         # Replacing with new individual
         self.pop[worst] = indiv
 
-        # Set fitness high to make new children not be replaced
-        self.currentfitness[worst] = np.inf
+        # Set fitness to lowest fitness of parent
+        pmin = min(self.currentfitness[p1], self.currentfitness[p2])
+        self.currentfitness[worst] = pmin
 
     def score(self, gen):
         """
@@ -154,7 +155,7 @@ class Population():
             children = self.offspring((p1, p2))
 
             for child in children:
-                self.replace(child)
+                self.replace(child, p1, p2)
 
         # update mutation factor
         self.update_factor()
