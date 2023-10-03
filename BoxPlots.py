@@ -54,3 +54,31 @@ plt.grid()
 
 plt.savefig(f'{path}/boxplot.png', dpi=300)
 plt.show()
+
+# statistical test
+from scipy import stats
+
+print("Statistical Test Results:")
+
+stat_test_res = [['Enemy 1\n (No Mutation)', 'Enemy 1\n (Varying Mutation)'], ['Enemy 2\n (No Mutation)', 'Enemy 2\n (Varying Mutation)'], ['Enemy 7\n (No Mutation)', 'Enemy 7\n (Varying Mutation)']]
+
+for enemy in stat_test_res:
+    print(f'comparing {enemy[0]}\n to {enemy[1]}')
+    # # Generate two sets of data for the two algorithms
+    algorithm1_data = np.array(results[enemy[0]])  # Replace with your data
+    algorithm2_data = np.array(results[enemy[1]])  # Replace with your data
+
+    # Perform a two-sample t-test
+    t_stat, p_value = stats.ttest_ind(algorithm1_data, algorithm2_data)
+
+    # Print the results
+    print(f"\tT-statistic:", t_stat)
+    print(f"\tP-value:", p_value)
+
+    # Determine the significance based on the p-value
+    alpha = 0.05  # You can adjust the significance level as needed
+    if p_value < alpha:
+        print(f"\tThe difference is statistically significant (reject the null hypothesis)")
+    else:
+        print(f"\tThe difference is not statistically significant (fail to reject the null hypothesis)")
+    print()
