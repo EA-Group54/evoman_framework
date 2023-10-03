@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Path to fitness files
-enemy = 7
+enemy = 2
 path = f'solutions/enemy{enemy}'
 
 # Mutation files and non-mutated
