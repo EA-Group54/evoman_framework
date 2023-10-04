@@ -1,10 +1,11 @@
 import numpy as np
 import math
 
-
+"""
 def fitness(env, indiv):
     f, p, e, t = env.play(pcont=indiv)
     return f, p, e, t
+"""
 
 
 class Population():
@@ -26,9 +27,40 @@ class Population():
 
     def fitness(self, env, indiv):
         f, p, e, t = env.play(pcont=indiv)
+        """
+        print('e',e)
+        print('p',p)
+        print('t',t)
+        print('f',f)
+        """
+        # If enemy is alive, give negative points for every enemy eneergy
+        if e>0:
+            print("enemy alive: ", e)
+            return (-e)
+        if p == 100:
+            #If player kills all and survives with 100 p, improve for time
+            print("miracle: ", e, p, t)
+            return 200 + 100 * math.exp(-0.00307011 * t)
+        #If enemy is dead, give 100 for achiving this, plus add player points (Because its the averages, player can win and also loose, having p be negative)
+        print("enemy dead: ", e, p)
+        return 100 + p  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
+
+        """
+        # Should read if e > 0 return negative eneemy points, if the player points are 100 p==100, then we care about time, else focus on player points
+        if e>0:
+            print("enemy alive: ", e)
+            return (-e)
+        if p == 100:
+            print("miracle: ", e, p, t)
+            return 100 + 100 * math.exp(-0.00307011 * t)
+        print("enemy dead: ", e, p)
+        return p
+        """
+          
+        """
         if self.phase == 0:
             return (-e)
-        elif self.phase == 1:
+        elif self.phase == 1: 
             if (100 - e) != 0:
                 return -e
             return p
@@ -37,6 +69,7 @@ class Population():
             if p >= self.phase_threshold and e == 0:
                 return 100 + 100 * math.exp(-0.00307011 * t)  # math.exp( ( (t)/1000) ) #100( (1/1+x) - 1/3001 )
             return p
+        """
 
     def eval(self, env):
         self.currentfitness = list(map(lambda x: self.fitness(env, x), self.pop))
@@ -163,12 +196,18 @@ class Population():
         # Evaluate all individuals in current population
         self.eval(env)  # The values are appended after the new children have been added
 
+        """
         if self.phase == 0 and np.max(self.currentfitness) == 0:
             self.phase = 1
             print('entering phase 2/3')
         if self.phase == 1 and np.max(self.currentfitness) == 100:
             self.phase = 2
             print('entering phase 3/3')
+
+        #******
+        print("self.phase")
+        print(self.phase)
+        """
 
     def savefitness(self, path):
         # Convert to numpy array

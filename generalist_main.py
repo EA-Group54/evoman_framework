@@ -59,8 +59,8 @@ def main(seed, mutation_factor, enemy_list):
     mutation_tag = ''
     if mutation_factor > 0:
         mutation_tag = 'm'
-    # pop.savefitness(f'{experiment_name}/'+'ene'+f'{enemy}'+'-fitness-'+str(seed)+mutation_tag+'.txt')
-    # pop.saveweights(f'{experiment_name}/'+'ene'+f'{enemy}'+'-weights-'+str(seed)+mutation_tag+'.txt')
+    pop.savefitness(f'{experiment_name}/'+'generalist-fitness-'+str(seed)+mutation_tag+'.txt')
+    pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
 
 if __name__ == '__main__':
