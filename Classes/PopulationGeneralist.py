@@ -1,5 +1,7 @@
 import numpy as np
 import math
+import statistics
+
 
 """
 def fitness(env, indiv):
@@ -26,50 +28,36 @@ class Population():
         self.eval(env)
 
     def fitness(self, env, indiv):
-        f, p, e, t = env.play(pcont=indiv)
-        """
-        print('e',e)
-        print('p',p)
-        print('t',t)
-        print('f',f)
-        """
+        _f=[]
+        _p=[]
+        _e=[]
+        _t=[]
+        enemies = [1,2,3,4,5,6,7,8]
+        for enemy in enemies:
+            new_env = env
+            new_env.enemies=[enemy]
+            new_env.multiplemode='no'
+            f, p, e, t = new_env.play(pcont=indiv)
+            _f.append(f)
+            _p.append(p)
+            _e.append(e)
+            _t.append(t)
+
+        f = statistics.mean(_f)
+        p = statistics.mean(_p)
+        e = statistics.mean(_e)
+        t = statistics.mean(_t)
+
         # If enemy is alive, give negative points for every enemy eneergy
         if e>0:
-            print("enemy alive: ", e)
             return (-e)
         if p == 100:
             #If player kills all and survives with 100 p, improve for time
-            print("miracle: ", e, p, t)
-            return 200 + 100 * math.exp(-0.00307011 * t)
+            return 200 + 100 * math.exp(-0.00307011 * t)    #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
         #If enemy is dead, give 100 for achiving this, plus add player points (Because its the averages, player can win and also loose, having p be negative)
-        print("enemy dead: ", e, p)
-        return 100 + p  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
+        return p  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
+    
 
-        """
-        # Should read if e > 0 return negative eneemy points, if the player points are 100 p==100, then we care about time, else focus on player points
-        if e>0:
-            print("enemy alive: ", e)
-            return (-e)
-        if p == 100:
-            print("miracle: ", e, p, t)
-            return 100 + 100 * math.exp(-0.00307011 * t)
-        print("enemy dead: ", e, p)
-        return p
-        """
-          
-        """
-        if self.phase == 0:
-            return (-e)
-        elif self.phase == 1: 
-            if (100 - e) != 0:
-                return -e
-            return p
-            # return(100-e)+(p*.1)
-        else:
-            if p >= self.phase_threshold and e == 0:
-                return 100 + 100 * math.exp(-0.00307011 * t)  # math.exp( ( (t)/1000) ) #100( (1/1+x) - 1/3001 )
-            return p
-        """
 
     def eval(self, env):
         self.currentfitness = list(map(lambda x: self.fitness(env, x), self.pop))
