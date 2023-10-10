@@ -121,23 +121,28 @@ class Population():
 
         return best
 
-    def replace(self, indiv, p1, p2, k=10):
+    def replace(self, indivs, k=10):
         """
         Replaces individuals in population with new one based on tournament
         """
 
         # Select fitness from k individuals
-        scores = np.random.choice(self.currentfitness, k, replace=False)
+        scores = self.currentfitness.copy()
 
-        # Get worst
-        worst = np.where(self.currentfitness == np.min(scores))[0][0]
+        # Looping through each individual
+        for indiv in range(indivs):
 
-        # Replacing with new individual
-        self.pop[worst] = indiv
+            # Get random fitness scores
+            randscores = np.random.choice(scores, k, replace=False)
 
-        # Set fitness to lowest fitness of parent
-        pmin = min(self.currentfitness[p1], self.currentfitness[p2])
-        self.currentfitness[worst] = pmin
+            # Get worst
+            worst = np.where(self.currentfitness == np.min(randscores))[0][0]
+
+            # Replacing with new individual
+            self.pop[worst] = indiv
+
+            # Remove from array
+            scores = np.delete(scores, worst)
 
     def score(self, gen):
         """
@@ -178,17 +183,21 @@ class Population():
         if n_child % 2 != 0:
             n_child += 1
 
+        # List with children
+        children = []
+
         # Making offspring
         for _ in range(int(n_child / 2)):
             # Getting parents
             p1 = self.tournament(10)
             p2 = self.tournament(10, [p1])
 
-            # Getting children
-            children = self.offspring((p1, p2))
+            # Add children to list
+            for child in self.offspring((p1, p2)):
+                children.append(child)
 
-            for child in children:
-                self.replace(child, p1, p2)
+        # Replace individuals with offspring
+        self.replace(children)
 
         # update mutation factor
         self.update_factor()
