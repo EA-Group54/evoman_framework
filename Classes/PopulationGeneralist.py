@@ -129,8 +129,9 @@ class Population():
         # Select fitness from k individuals
         scores = self.currentfitness.copy()
 
+
         # Looping through each individual
-        for indiv in range(indivs):
+        for indiv in indivs:
 
             # Get random fitness scores
             randscores = np.random.choice(scores, k, replace=False)
@@ -140,6 +141,9 @@ class Population():
 
             # Replacing with new individual
             self.pop[worst] = indiv
+
+            # Get worst in scores array
+            worst = np.where(scores == np.min(randscores))[0][0]
 
             # Remove from array
             scores = np.delete(scores, worst)
