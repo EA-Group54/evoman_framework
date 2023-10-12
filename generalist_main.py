@@ -34,8 +34,8 @@ def main(seed, mutation_factor, enemy_list):
                       visuals=False)
 
     # Number of generations and population size
-    popsize = 100
-    gen = 90
+    popsize = 200
+    gen = 1700
 
     # Mutation factor (to decreease overtime, reset on stall)
     #mutation_factor = 0.0 # For experiment, we are using .5 and 0
@@ -50,15 +50,19 @@ def main(seed, mutation_factor, enemy_list):
     # Create first population
     pop = Population(popsize, bounds, n, env, mutation_factor)
 
+    # Tag for file name
+    mutation_tag = ''
+    if mutation_factor > 0:
+        mutation_tag = 'm'
+
     # Run generations
     for i in range(1, gen):
         pop.update(env, 20)
         pop.score(i + 1)
+        pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
+        print('Updated weights have beeen saved to ', f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
     # Save file
-    mutation_tag = ''
-    if mutation_factor > 0:
-        mutation_tag = 'm'
     pop.savefitness(f'{experiment_name}/'+'generalist-fitness-'+str(seed)+mutation_tag+'.txt')
     pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
