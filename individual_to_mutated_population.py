@@ -37,8 +37,6 @@ for i in range(population_size):
 #Create population array
 population = np.array(holder)
 
-print(population)
-
-
-
 np.savetxt(out_path, population)
+
+print('population saved to', out_path)
