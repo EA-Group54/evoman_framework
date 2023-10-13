@@ -27,13 +27,14 @@ mutation_factor = .7
 
 # Generat muttant populaiton
 holder = []
-for i in range(population_size):
+for i in range(population_size-1):  # We want to leave space for the original individual 
     # Add or subtract
     sign = np.random.randint(0, 2, len(individual)) * 2 - 1
     # Add mutation
     mutant = individual + ( (np.random.normal(0, 1, len(individual)) * sign) * mutation_factor )
     #Append to list
     holder.append(mutant)
+holder.append(individual)   # Append original individual
 #Create population array
 population = np.array(holder)
 

@@ -32,6 +32,50 @@ class Population():
         _p=[]
         _e=[]
         _t=[]
+
+        adj_add_e=[]
+
+        k=0
+        enemies = [1,2,3,4,5,6,7,8]
+        for enemy in enemies:
+            new_env = env
+            new_env.enemies=[enemy]
+            new_env.multiplemode='no'
+            f, p, e, t = new_env.play(pcont=indiv)
+            #[(x-100)^{2}]/{100} at 0 --> 100, at 50 --> 25, at 100 --> 0   #Closer to e=0, the more points it gets, exponentially
+            adjusted_additive_e = ( ((e-100)**2) /100)
+            adj_add_e.append(adjusted_additive_e)
+
+            _f.append(f)
+            _p.append(p)
+            _e.append(e)
+            _t.append(t)
+            if e <= 0:
+                k += 1
+
+        avr_f = statistics.mean(_f)
+        avr_p = statistics.mean(_p)
+        avr_e = statistics.mean(_e)
+        avr_t = statistics.mean(_t)
+
+
+
+        #x^{2}/{100}    at 0 --> 0, at 50 --> 25, at 100 --> 100 # This, made negative, makes the small changes closer to 0 worth more (lose leess due to -e)
+
+
+        return (sum(adj_add_e))+(avr_p/10)
+
+
+
+
+
+
+
+        _f=[]
+        _p=[]
+        _e=[]
+        _t=[]
+        k=0
         enemies = [1,2,3,4,5,6,7,8]
         for enemy in enemies:
             new_env = env
@@ -42,20 +86,22 @@ class Population():
             _p.append(p)
             _e.append(e)
             _t.append(t)
+            if e <= 0:
+                k += 1
 
-        avr_f = statistics.mean(_f)
-        avr_p = statistics.mean(_p)
-        avr_e = statistics.mean(_e)
-        avr_t = statistics.mean(_t)
+        f = statistics.mean(_f)
+        p = statistics.mean(_p)
+        e = statistics.mean(_e)
+        t = statistics.mean(_t)
 
         # If enemy is alive, give negative points for every enemy eneergy
-        if avr_e>0:
-            return (-avr_e)
-        if avr_p == 100:
+        if e>0:
+            return (-e)+(100*k)
+        if p == 100:
             #If player kills all and survives with 100 p, improve for time
-            return 200 + 100 * math.exp(-0.00307011 * avr_t)    #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
+            return (100*k)+p + 100 * math.exp(-0.00307011 * t)    #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
         #If enemy is dead, give 100 for achiving this, plus add player points (Because its the averages, player can win and also loose, having p be negative)
-        return avr_p  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
+        return p+(100*k)  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
     
 
 

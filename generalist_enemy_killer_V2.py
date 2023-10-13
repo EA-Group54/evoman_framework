@@ -5,7 +5,7 @@ from evoman.environment import Environment
 import numpy as np
 import os
 from Classes.PlayerController import PlayerController
-from Classes.PopulationGeneralist import Population
+from Classes.PopulationGeneralistEnemyKillerV2 import Population
 
 def main(seed, mutation_factor, enemy_list):
     seed = seed
@@ -16,7 +16,7 @@ def main(seed, mutation_factor, enemy_list):
     if headless:
         os.environ["SDL_VIDEODRIVER"] = "dummy"
 
-    experiment_name = 'solutions'
+    experiment_name = 'generalist_enemy_killer_V2'
     if not os.path.exists(experiment_name):
         os.makedirs(experiment_name)
 
@@ -34,8 +34,8 @@ def main(seed, mutation_factor, enemy_list):
                       visuals=False)
 
     # Number of generations and population size
-    popsize = 300
-    gen = 1700
+    popsize = 100
+    gen = 90
 
     # Mutation factor (to decreease overtime, reset on stall)
     #mutation_factor = 0.0 # For experiment, we are using .5 and 0
@@ -50,11 +50,6 @@ def main(seed, mutation_factor, enemy_list):
     # Create first population
     pop = Population(popsize, bounds, n, env, mutation_factor)
 
-    # Tag for file name
-    mutation_tag = ''
-    if mutation_factor > 0:
-        mutation_tag = 'm'
-
     # Run generations
     for i in range(1, gen):
         pop.update(env, 20)
@@ -63,6 +58,9 @@ def main(seed, mutation_factor, enemy_list):
         print('Updated weights have beeen saved to ', f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
     # Save file
+    mutation_tag = ''
+    if mutation_factor > 0:
+        mutation_tag = 'm'
     pop.savefitness(f'{experiment_name}/'+'generalist-fitness-'+str(seed)+mutation_tag+'.txt')
     pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
