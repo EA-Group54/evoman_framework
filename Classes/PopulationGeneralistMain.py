@@ -50,23 +50,12 @@ class Population():
         avr_p = statistics.mean(_p)
         avr_e = statistics.mean(_e)
         avr_t = statistics.mean(_t)
-        
+
         if k <= round(len(enemies)*.6):
             return (-avr_e)
         if avr_p <= (60):
             return (-avr_e) + avr_p
         return  (-avr_e) + avr_p + ( 100 * math.exp(-0.00307011 * avr_t) )   #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
-
-        """
-        # If enemy is alive, give negative points for every enemy eneergy
-        if avr_e>0:
-            return (-avr_e)
-        if avr_p == 100:
-            #If player kills all and survives with 100 p, improve for time
-            return 200 + 100 * math.exp(-0.00307011 * avr_t)    #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
-        #If enemy is dead, give 100 for achiving this, plus add player points (Because its the averages, player can win and also loose, having p be negative)
-        return avr_p  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
-        """
 
 
     def eval(self, env):
