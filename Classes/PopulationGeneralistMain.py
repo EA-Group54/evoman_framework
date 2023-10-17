@@ -16,6 +16,7 @@ class Population():
         self.currentfitness = None
         self.pop = np.random.uniform(bounds[0], bounds[1], (size, n))
         self.savedfitness = []
+        self.saved_alt_fitness = []
         self.factor = mutation_factor
         self.enemies = enemies
         self.factor_epoch = 1
