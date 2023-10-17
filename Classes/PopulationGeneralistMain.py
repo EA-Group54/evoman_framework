@@ -236,10 +236,8 @@ class Population():
         self.factor_epoch += 1
 
     def mutate(self, indiv):
-        # Add or subtract
-        sign = np.random.randint(0, 2, len(indiv)) * 2 - 1
 
         # Add mutation
-        indiv += ((np.random.normal(0, 1, len(indiv)) * sign) * (self.factor / self.factor_epoch))
+        indiv += (np.random.normal(0, 1, len(indiv)) * (self.factor / self.factor_epoch))
 
         return indiv
