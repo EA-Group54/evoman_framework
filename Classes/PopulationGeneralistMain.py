@@ -53,7 +53,7 @@ class Population():
         avr_e = statistics.mean(_e)
         avr_t = statistics.mean(_t)
 
-        if k <= round(len(enemies)*.6):
+        if k <= round(len(self.enemies)*.6):
             return (-avr_e), avr_f
         if avr_p <= (60):
             return ((-avr_e) + avr_p), avr_f
