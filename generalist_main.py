@@ -7,7 +7,7 @@ import os
 from Classes.PlayerController import PlayerController
 from Classes.PopulationGeneralistBaseline import Population
 
-def main(seed, mutation_factor, enemy_list):
+def main(seed, mutation_factor, enemy_list, enemies):
     seed = seed
     mutation_factor = mutation_factor
     np.random.seed(seed) #Original seed: 500 # 136 197 296 399 457 ｜ 555 734 814 897 956
@@ -48,7 +48,7 @@ def main(seed, mutation_factor, enemy_list):
     bounds = (-1, 1)
 
     # Create first population
-    pop = Population(popsize, bounds, n, env, mutation_factor)
+    pop = Population(popsize, bounds, n, env, mutation_factor, enemies)
 
     # Tag for file name
     mutation_tag = ''
@@ -59,8 +59,6 @@ def main(seed, mutation_factor, enemy_list):
     for i in range(1, gen):
         pop.update(env, 4)
         pop.score(i + 1)
-        pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
-        print('Updated weights have beeen saved to ', f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
     # Save file
     pop.savefitness(experiment_name, seed)
@@ -87,4 +85,4 @@ if __name__ == '__main__':
     seed = 136
     mutation_factor = 0.5
     enemy_list=[1,2,3,4,5,6,7,8]
-    main(seed,mutation_factor,enemy_list)
+    main(seed,mutation_factor,enemy_list, enemies)
