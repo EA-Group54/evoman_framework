@@ -9,6 +9,7 @@ class Population():
         self.currentfitness = None
         self.pop = np.random.uniform(bounds[0], bounds[1], (size, n))
         self.savedfitness = []
+        self.saved_alt_fitness = []
         self.factor = mutation_factor
         self.factor_epoch = 1
         self.last_best = 0  # Used to check if improvement was made
@@ -67,8 +68,16 @@ class Population():
 
 
     def eval(self, env):
-        self.currentfitness = list(map(lambda x: self.fitness(env, x), self.pop))
+        currentfitness = []
+        alt_fitness = []
+        for indiv in self.pop:
+            x, y = self.fitness(env, indiv)
+            currentfitness.append(x)
+            alt_fitness.append(y)
+
+        self.currentfitness = currentfitness
         self.savedfitness.append(self.currentfitness)
+        self.saved_alt_fitness.append(alt_fitness)
 
     def offspring(self, parents):
         """
@@ -234,10 +243,8 @@ class Population():
         self.factor_epoch += 1
 
     def mutate(self, indiv):
-        # Add or subtract
-        sign = np.random.randint(0, 2, len(indiv)) * 2 - 1
 
         # Add mutation
-        indiv += ((np.random.normal(0, 1, len(indiv)) * sign) * (self.factor / self.factor_epoch))
+        indiv += (np.random.normal(0, 1, len(indiv)) * (self.factor / self.factor_epoch))
 
         return indiv
