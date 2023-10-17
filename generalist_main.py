@@ -5,12 +5,11 @@ from evoman.environment import Environment
 import numpy as np
 import os
 from Classes.PlayerController import PlayerController
-from Classes.PopulationGeneralistBaseline import Population
+from Classes.PopulationGeneralistMain import Population
 
-def main(seed, mutation_factor, enemy_list, enemies):
-    seed = seed
-    mutation_factor = mutation_factor
-    np.random.seed(seed) #Original seed: 500 # 136 197 296 399 457 ｜ 555 734 814 897 956
+
+def main(seed, mutation_factor, enemy_list):
+    np.random.seed(seed)  # Original seed: 500 # 136 197 296 399 457 ｜ 555 734 814 897 956
     # choose this for not using visuals and thus making experiments faster
     headless = True
     if headless:
@@ -34,12 +33,8 @@ def main(seed, mutation_factor, enemy_list, enemies):
                       visuals=False)
 
     # Number of generations and population size
-    popsize = 20
-    gen = 1700
-
-    # Mutation factor (to decreease overtime, reset on stall)
-    #mutation_factor = 0.0 # For experiment, we are using .5 and 0
-    # Some results. with gen = 90: .2-->93.4, .5-->93.5, 1-->93.3, 2-->93.9, 3-->93.3, 4-->93.5, 5-->93.9, 12-->93.2, 13-->93.9, 25-->93.4, 50-->93.1 Without mutation 91.9
+    popsize = 100
+    gen = 50
 
     # Calculate length for bias and weights array
     n = (env.get_num_sensors() + 1) * n_hidden_neurons + (n_hidden_neurons + 1) * 5
@@ -48,12 +43,7 @@ def main(seed, mutation_factor, enemy_list, enemies):
     bounds = (-1, 1)
 
     # Create first population
-    pop = Population(popsize, bounds, n, env, mutation_factor, enemies)
-
-    # Tag for file name
-    mutation_tag = ''
-    if mutation_factor > 0:
-        mutation_tag = 'm'
+    pop = Population(popsize, bounds, n, env, mutation_factor, enemy_list)
 
     # Run generations
     for i in range(1, gen):
@@ -66,23 +56,11 @@ def main(seed, mutation_factor, enemy_list, enemies):
 
 
 if __name__ == '__main__':
-
     seeds = [136, 197, 296, 399, 457, 555, 734, 814, 897, 956]
-    mutation_factors = 0.5
-    enemies = [1,2,7]
+    enemies_list = ([1, 2, 3, 4, 5, 6, 7, 8],
+                    [6, 7, 8])
 
-
-    """
-    for seed in seeds:
-        print(seed)
-        for mutation_factor in mutation_factors:
-            print(mutation_factor)
-            for enemy in enemies:
-                print(enemy)
-                main(seed,mutation_factor,enemy)
-    """
-
-    seed = 136
     mutation_factor = 0.5
-    enemy_list=[1,2,3,4,5,6,7,8]
-    main(seed,mutation_factor,enemy_list, enemies)
+    for seed in seeds:
+        for enemies in enemies_list:
+            main(seed, mutation_factor, enemies)
