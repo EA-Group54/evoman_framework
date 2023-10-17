@@ -70,7 +70,7 @@ def main(seed, mutation_factor, enemy_list):
 if __name__ == '__main__':
 
     seeds = [136, 197, 296, 399, 457, 555, 734, 814, 897, 956]
-    mutation_factors = [0.0, 0.5]
+    mutation_factors = [0.5]
     enemies = [1,2,7]
 
 
