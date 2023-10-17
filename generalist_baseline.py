@@ -5,7 +5,7 @@ from evoman.environment import Environment
 import numpy as np
 import os
 from Classes.PlayerController import PlayerController
-from Classes.Population import Population
+from Classes.PopulationGeneralistBaseline import Population
 
 def main(seed, mutation_factor, enemy_list):
     seed = seed

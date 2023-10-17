@@ -3,12 +3,6 @@ import math
 import statistics
 
 
-"""
-def fitness(env, indiv):
-    f, p, e, t = env.play(pcont=indiv)
-    return f, p, e, t
-"""
-
 
 class Population():
     def __init__(self, size, bounds, n, env, mutation_factor):
@@ -29,10 +23,6 @@ class Population():
 
     def fitness(self, env, indiv):
         _f=[]
-        _p=[]
-        _e=[]
-        _t=[]
-        k=0
         enemies = [1,2,3,4,5,6,7,8]
         for enemy in enemies:
             new_env = env
@@ -40,33 +30,9 @@ class Population():
             new_env.multiplemode='no'
             f, p, e, t = new_env.play(pcont=indiv)
             _f.append(f)
-            _p.append(p)
-            _e.append(e)
-            _t.append(t)
-            if e<=0:
-                k+=1
 
         avr_f = statistics.mean(_f)
-        avr_p = statistics.mean(_p)
-        avr_e = statistics.mean(_e)
-        avr_t = statistics.mean(_t)
-        
-        if k <= round(len(enemies)*.6):
-            return (-avr_e)
-        if avr_p <= (60):
-            return (-avr_e) + avr_p
-        return  (-avr_e) + avr_p + ( 100 * math.exp(-0.00307011 * avr_t) )   #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
-
-        """
-        # If enemy is alive, give negative points for every enemy eneergy
-        if avr_e>0:
-            return (-avr_e)
-        if avr_p == 100:
-            #If player kills all and survives with 100 p, improve for time
-            return 200 + 100 * math.exp(-0.00307011 * avr_t)    #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
-        #If enemy is dead, give 100 for achiving this, plus add player points (Because its the averages, player can win and also loose, having p be negative)
-        return avr_p  #Alternatively, we could use (p-e) where the runs where the agent loses generate negative p. I believe that currently, we are assuming tthat the enmies are dead because we get negative e. However, if we can get neegative e (overkill an enemy) then it is possibe that some are surviving and the value of others is making the aveerage appear negative.
-        """
+        return avr_f
 
 
     def eval(self, env):
