@@ -52,10 +52,10 @@ class Population():
         avr_t = statistics.mean(_t)
 
         if k <= round(len(enemies)*.6):
-            return (-avr_e)
+            return (-avr_e), avr_f
         if avr_p <= (60):
-            return (-avr_e) + avr_p
-        return  (-avr_e) + avr_p + ( 100 * math.exp(-0.00307011 * avr_t) )   #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
+            return ((-avr_e) + avr_p), avr_f
+        return  ( (-avr_e) + avr_p + ( 100 * math.exp(-0.00307011 * avr_t) ) ), avr_f  #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
 
 
     def eval(self, env):

@@ -22,6 +22,7 @@ class Population():
         self.eval(env)
 
     def fitness(self, env, indiv):
+        """
         _f=[]
         enemies = [1,2,3,4,5,6,7,8]
         for enemy in enemies:
@@ -33,6 +34,36 @@ class Population():
 
         avr_f = statistics.mean(_f)
         return avr_f
+        """
+
+        _f=[]
+        _p=[]
+        _e=[]
+        _t=[]
+        k=0
+        enemies = [1,2,3,4,5,6,7,8]
+        for enemy in enemies:
+            new_env = env
+            new_env.enemies=[enemy]
+            new_env.multiplemode='no'
+            f, p, e, t = new_env.play(pcont=indiv)
+            _f.append(f)
+            _p.append(p)
+            _e.append(e)
+            _t.append(t)
+            if e<=0:
+                k+=1
+
+        avr_f = statistics.mean(_f)
+        avr_p = statistics.mean(_p)
+        avr_e = statistics.mean(_e)
+        avr_t = statistics.mean(_t)
+
+        if k <= round(len(enemies)*.6):
+            return avr_f, (-avr_e)
+        if avr_p <= (60):
+            return avr_f, (-avr_e) + avr_p
+        return  avr_f, (-avr_e) + avr_p + ( 100 * math.exp(-0.00307011 * avr_t) )   #Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
 
 
     def eval(self, env):
@@ -89,6 +120,7 @@ class Population():
         """
         Replaces individuals in population with new one based on tournament
         """
+        
 
         # Select fitness from k individuals
         scores = self.currentfitness.copy()
