@@ -4,8 +4,10 @@ from evoman.environment import Environment
 # imports other libs
 import numpy as np
 import os
-from Classes.PlayerController import PlayerController
-from Classes.PopulationGeneralistMain import Population
+#from Classes.PlayerController import PlayerController
+from demo_controller import player_controller as PlayerController
+from Classes.PopulationGeneralistEnemyKillerV2 import Population
+
 
 def main(seed, mutation_factor, enemy_list):
     seed = seed
@@ -16,10 +18,17 @@ def main(seed, mutation_factor, enemy_list):
     if headless:
         os.environ["SDL_VIDEODRIVER"] = "dummy"
 
-    experiment_name = 'solutions'
+    experiment_name = 'generalist_demo_controller_enemy_killer_V2'
     if not os.path.exists(experiment_name):
         os.makedirs(experiment_name)
 
+    imported_population=None
+    if os.path.exists(experiment_name+'/mutated_population.txt'):
+        imported_population = np.loadtxt(experiment_name+'/mutated_population.txt')
+        print('Mutated Population in use')        
+    else:
+        print('New Population in use')
+        
     n_hidden_neurons = 10
 
     # initializes simulation in individual evolution mode, for single static enemy.
@@ -34,8 +43,8 @@ def main(seed, mutation_factor, enemy_list):
                       visuals=False)
 
     # Number of generations and population size
-    popsize = 300
-    gen = 1700
+    popsize = 100
+    gen = 1500
 
     # Mutation factor (to decreease overtime, reset on stall)
     #mutation_factor = 0.0 # For experiment, we are using .5 and 0
@@ -48,9 +57,8 @@ def main(seed, mutation_factor, enemy_list):
     bounds = (-1, 1)
 
     # Create first population
-    pop = Population(popsize, bounds, n, env, mutation_factor)
+    pop = Population(popsize, bounds, n, env, mutation_factor, impt_pop=imported_population)
 
-    # Tag for file name
     mutation_tag = ''
     if mutation_factor > 0:
         mutation_tag = 'm'
@@ -88,3 +96,18 @@ if __name__ == '__main__':
     mutation_factor = 0.5
     enemy_list=[1,2,3,4,5,6,7,8]
     main(seed,mutation_factor,enemy_list)
+
+
+
+    """
+    
+        experiment_name = 'generalist_enemy_killer_V2'
+    if not os.path.exists(experiment_name+'/mutated_population.txt'):
+        population = np_random_generator.uniform(x_min,x_max,(nm_population, nm_weights))
+        print('New Population in use')
+    else:
+        population = np.loadtxt(experiment_name+'/mutated_population.txt')
+        print('Mutated Population in use')
+    
+    main(seed,mutation_factor,enemy_list, pop=population, experiment_name)
+    """
