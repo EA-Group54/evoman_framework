@@ -5,7 +5,7 @@ from evoman.environment import Environment
 import numpy as np
 import os
 from Classes.PlayerController import PlayerController
-from Classes.PopulationGeneralistMain import Population
+from Classes.PopulationGeneralistBaseline import Population
 
 def main(seed, mutation_factor, enemy_list):
     seed = seed
@@ -34,7 +34,7 @@ def main(seed, mutation_factor, enemy_list):
                       visuals=False)
 
     # Number of generations and population size
-    popsize = 300
+    popsize = 20
     gen = 1700
 
     # Mutation factor (to decreease overtime, reset on stall)
@@ -57,20 +57,20 @@ def main(seed, mutation_factor, enemy_list):
 
     # Run generations
     for i in range(1, gen):
-        pop.update(env, 20)
+        pop.update(env, 4)
         pop.score(i + 1)
         pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
         print('Updated weights have beeen saved to ', f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
 
     # Save file
-    pop.savefitness(f'{experiment_name}/'+'generalist-fitness-'+str(seed)+mutation_tag+'.txt')
-    pop.saveweights(f'{experiment_name}/'+'generalist-weights-'+str(seed)+mutation_tag+'.txt')
+    pop.savefitness(experiment_name, seed)
+    pop.saveweights(experiment_name, seed)
 
 
 if __name__ == '__main__':
 
     seeds = [136, 197, 296, 399, 457, 555, 734, 814, 897, 956]
-    mutation_factors = [0.0, 0.5]
+    mutation_factors = 0.5
     enemies = [1,2,7]
 
 

@@ -11,11 +11,13 @@ def fitness(env, indiv):
 
 
 class Population():
-    def __init__(self, size, bounds, n, env, mutation_factor):
+    def __init__(self, size, bounds, n, env, mutation_factor, enemies):
+        self.saved_alt_fitness = []
         self.currentfitness = None
         self.pop = np.random.uniform(bounds[0], bounds[1], (size, n))
         self.savedfitness = []
         self.factor = mutation_factor
+        self.enemies = enemies
         self.factor_epoch = 1
         self.last_best = 0  # Used to check if improvement was made
         self.counter = 0  # Counter used to reset mutation factor on stall
@@ -33,8 +35,7 @@ class Population():
         _e=[]
         _t=[]
         k=0
-        enemies = [1,2,3,4,5,6,7,8]
-        for enemy in enemies:
+        for enemy in self.enemies:
             new_env = env
             new_env.enemies=[enemy]
             new_env.multiplemode='no'
@@ -59,8 +60,16 @@ class Population():
 
 
     def eval(self, env):
-        self.currentfitness = list(map(lambda x: self.fitness(env, x), self.pop))
+        currentfitness = []
+        alt_fitness = []
+        for indiv in self.pop:
+            x, y = self.fitness(env, indiv)
+            currentfitness.append(x)
+            alt_fitness.append(y)
+
+        self.currentfitness = currentfitness
         self.savedfitness.append(self.currentfitness)
+        self.saved_alt_fitness.append(alt_fitness)
 
     def offspring(self, parents):
         """
@@ -209,17 +218,21 @@ class Population():
         print(self.phase)
         """
 
-    def savefitness(self, path):
+    def savefitness(self, path, seed):
+
+
         # Convert to numpy array
         savedfitness = np.array(self.savedfitness)
+        saved_alt_fitness = np.array(self.saved_alt_fitness)
 
         # Save as txt
-        np.savetxt(path, savedfitness)
+        np.savetxt(f'{path}/generalist-fitness-{seed}-main.txt', savedfitness)
+        np.savetxt(f'{path}/generalist-alternativefitness-{seed}-main.txt', saved_alt_fitness)
 
-    def saveweights(self, path):
+    def saveweights(self, path, seed):
         # Get best fitness
         best = np.where(self.currentfitness == np.max(self.currentfitness))[0][0]
-        np.savetxt(path, self.pop[best].flatten())
+        np.savetxt(f'{path}/generalist-weights-{seed}-main.txt', self.pop[best].flatten())
 
     def update_factor(self):
         self.factor_epoch += 1
