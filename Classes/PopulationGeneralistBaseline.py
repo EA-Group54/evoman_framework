@@ -63,8 +63,7 @@ class Population():
             return avr_f, (-avr_e)
         if avr_p <= (60):
             return avr_f, (-avr_e) + avr_p
-        return avr_f, (-avr_e) + avr_p + (100 * math.exp(
-            -0.00307011 * avr_t))  # Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
+        return avr_f, (-avr_e) + avr_p + (100 * math.exp(-0.00307011 * avr_t))  # Formula from 100 to 0 in 3000 steps 100*( math.exp(-t/3000) - (t/(math.exp*3000)) )
 
     def eval(self, env):
         currentfitness = []
@@ -230,13 +229,14 @@ class Population():
         saved_alt_fitness = np.array(self.saved_alt_fitness)
 
         # Save as txt
-        np.savetxt(f'{path}/generalist-fitness-{seed}-baseline.txt', savedfitness)
-        np.savetxt(f'{path}/generalist-alternativefitness-{seed}-baseline.txt', saved_alt_fitness)
+        np.savetxt(f'{path}/generalist-fitness-{seed}-{self.enemies}-baseline.txt', savedfitness)
+        np.savetxt(f'{path}/generalist-alternativefitness-{seed}-{self.enemies}-baseline.txt', saved_alt_fitness)
 
     def saveweights(self, path, seed):
         # Get best fitness
         best = np.where(self.currentfitness == np.max(self.currentfitness))[0][0]
-        np.savetxt(f'{path}/generalist-weights-{seed}-baseline.txt', self.pop[best].flatten())
+        np.savetxt(f'{path}/generalist-weights-{seed}-{self.enemies}-baseline.txt', self.pop[best].flatten())
+
 
     def update_factor(self):
         self.factor_epoch += 1

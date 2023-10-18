@@ -227,13 +227,13 @@ class Population():
         saved_alt_fitness = np.array(self.saved_alt_fitness)
 
         # Save as txt
-        np.savetxt(f'{path}/generalist-fitness-{seed}-main.txt', savedfitness)
-        np.savetxt(f'{path}/generalist-alternativefitness-{seed}-main.txt', saved_alt_fitness)
+        np.savetxt(f'{path}/generalist-fitness-{seed}-{self.enemies}-main.txt', savedfitness)
+        np.savetxt(f'{path}/generalist-alternativefitness-{seed}-{self.enemies}-main.txt', saved_alt_fitness)
 
     def saveweights(self, path, seed):
         # Get best fitness
         best = np.where(self.currentfitness == np.max(self.currentfitness))[0][0]
-        np.savetxt(f'{path}/generalist-weights-{seed}-main.txt', self.pop[best].flatten())
+        np.savetxt(f'{path}/generalist-weights-{seed}-{self.enemies}-main.txt', self.pop[best].flatten())
 
     def update_factor(self):
         self.factor_epoch += 1
