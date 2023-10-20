@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import os
 
 # Create figure
-size = 6
-fig, ax = plt.subplots(1,2, figsize=(10, 5))
+horizontal = (12, 6)
+vertical = (6, 8)
+fig, ax = plt.subplots(1, 2, figsize=horizontal)
 
 # Number of generations
 gens = np.arange(0, 50)
@@ -106,13 +107,16 @@ for i in range(2):
 
     ax[i].set_title(titles[i])
     ax[i].set_ylim(-100, 10)
+    ax[i].set_xlim(0, 50)
     ax[i].legend(loc='upper left', ncol=2)
+    ax[i].grid()
     ax[i].set_xlabel('Generations')
+    ax[i].set_ylabel('Fitness')
     # if i != 1:
-    #     ax[i].yaxis.set_tick_params(labelbottom=False, bottom=False)
+    #     ax[i].xaxis.set_tick_params(labelbottom=False, bottom=False)
     # else:
     #     ax[i].set_xlabel('Generations')
 
 plt.tight_layout()
-plt.savefig('plot.png', dpi=300)
+plt.savefig('Horizontal plots.png', dpi=300)
 plt.show()
